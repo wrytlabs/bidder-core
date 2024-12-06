@@ -45,9 +45,9 @@ contract BidderManagerV1 is ERC721 {
 		address collateral,
 		uint256 size,
 		uint256 bidded,
-		uint256 swapped,
-		uint256 profit
+		uint256 swapped
 	);
+	event Profit(uint256 profit, uint256 totalRewards, uint256 totalFunds, uint256 refRatio);
 
 	// ---------------------------------------------------------------------------------------
 
@@ -109,7 +109,7 @@ contract BidderManagerV1 is ERC721 {
 
 		Fund memory user = funds[tokenId];
 		uint256 diff = refRatio - user.refRatio;
-		uint256 payout = user.amount * (1 + diff / 1 ether);
+		uint256 payout = user.amount + (diff * user.amount) / 1 ether;
 
 		// clean up
 		totalFunds -= user.amount;
@@ -197,13 +197,11 @@ contract BidderManagerV1 is ERC721 {
 		uint256 zchfAfter = zchf.balanceOf(address(this));
 		if (zchfAfter < zchfBefore) revert NoLoss(zchfBefore, zchfAfter);
 
-		// profit, overflow checked before
-		uint256 profit = zchfAfter - zchfBefore;
-		refRatio += (profit * 1 ether) / totalFunds;
-		totalRewards += profit;
+		// declareProfit
+		declareProfit(zchfBefore, zchfAfter);
 
 		// emit
-		emit Execute(msg.sender, index, coll, size, toBid, swapped, profit);
+		emit Execute(msg.sender, index, coll, size, toBid, swapped);
 	}
 
 	function executeSwap(
@@ -212,8 +210,11 @@ contract BidderManagerV1 is ERC721 {
 		uint256 amountIn,
 		uint256 amountOutMinimum
 	) internal returns (uint256) {
-		// approve to router
-		IERC20(tokens[0]).approve(address(swapRouter), IERC20(tokens[0]).balanceOf(address(this)));
+		// approve infinity, collateral will be swapped straight away
+		IERC20 coll = IERC20(tokens[0]);
+		if (coll.allowance(address(this), address(swapRouter)) < amountIn) {
+			coll.approve(address(swapRouter), 1 << 255);
+		}
 
 		// setup swap
 		ISwapRouter.ExactInputParams memory params = ISwapRouter.ExactInputParams({
@@ -229,4 +230,12 @@ contract BidderManagerV1 is ERC721 {
 	}
 
 	// ---------------------------------------------------------------------------------------
+
+	function declareProfit(uint256 zchfBefore, uint256 zchfAfter) public {
+		// profit, overflow checked before
+		uint256 profit = zchfAfter - zchfBefore;
+		refRatio += (profit * 1 ether) / totalFunds;
+		totalRewards += profit;
+		emit Profit(profit, totalRewards, totalFunds, refRatio);
+	}
 }
