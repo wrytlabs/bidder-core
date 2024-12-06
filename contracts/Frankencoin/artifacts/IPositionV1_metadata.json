@@ -1,0 +1,374 @@
+{
+	"compiler": {
+		"version": "0.8.28+commit.7893614a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "challengeStart",
+						"type": "uint256"
+					}
+				],
+				"name": "challengeData",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "liqPrice",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint64",
+						"name": "phase1",
+						"type": "uint64"
+					},
+					{
+						"internalType": "uint64",
+						"name": "phase2",
+						"type": "uint64"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "challengePeriod",
+				"outputs": [
+					{
+						"internalType": "uint64",
+						"name": "",
+						"type": "uint64"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "collateral",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "helpers",
+						"type": "address[]"
+					},
+					{
+						"internalType": "string",
+						"name": "message",
+						"type": "string"
+					}
+				],
+				"name": "deny",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "expiration",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "totalMint",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "beforeFees",
+						"type": "bool"
+					}
+				],
+				"name": "getUsableMint",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_coll",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_mint",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expiration",
+						"type": "uint256"
+					}
+				],
+				"name": "initializeClone",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minimumCollateral",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "minted",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "size",
+						"type": "uint256"
+					}
+				],
+				"name": "notifyChallengeAverted",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "size",
+						"type": "uint256"
+					}
+				],
+				"name": "notifyChallengeStarted",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_bidder",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_size",
+						"type": "uint256"
+					}
+				],
+				"name": "notifyChallengeSucceeded",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "original",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "price",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "reduceLimitForClone",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveContribution",
+				"outputs": [
+					{
+						"internalType": "uint32",
+						"name": "",
+						"type": "uint32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Frankencoin/IPositionV1.sol": "IPositionV1"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Frankencoin/IERC20.sol": {
+			"keccak256": "0x6c4823424e1d0c53e2d3e978b81929fcec2583b96ed286abc955b71a5aad5544",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f488f8646de83ae4fac9597f2326e726bbf64c857e1a4a4d8567c1184c16437c",
+				"dweb:/ipfs/QmPxhWVWbDcPHCKa8UiMwDkAQTfHwH4vKvketYF6MvQbZC"
+			]
+		},
+		"contracts/Frankencoin/IFrankencoin.sol": {
+			"keccak256": "0x0d9637b8eb808e96499a13140c44b7d82ea747108670ea3d95e02c6b95d054f3",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a47fcc44eccab07500434d13b524c1c875c58d1d9b3c1e6cf9a180faed4fc47d",
+				"dweb:/ipfs/QmYutEHmrpzFcF2KM3p6n9GyG8Aff6ZuzvQR74mA85EKDe"
+			]
+		},
+		"contracts/Frankencoin/IPositionV1.sol": {
+			"keccak256": "0xad45d18b430332900252d1bdac1a9f03200e0c15a1adf96b78ab9697e48a39e1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a587ca1db1ca6bd86d99e5b6a4a09f1662149937ea7dcedd0d1cc812f1811b43",
+				"dweb:/ipfs/QmZxCBHXXzh7vHjoPubbS8XnDMVhBpEcRR8LYCKrTrHMvF"
+			]
+		},
+		"contracts/Frankencoin/IReserve.sol": {
+			"keccak256": "0x3b46b47f54a43bf2da382a4e5cc70e72a1aeb7845c75d30a04809ecccf2019dc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://19fb73f840f6f2871b94457b32a90e2bfb186bc24e253b888789e09dc3e8dcb8",
+				"dweb:/ipfs/QmTTWq2VmAHNk4e7f3SshhSX6YzLCxrJV9WqMx2Swpa9f4"
+			]
+		}
+	},
+	"version": 1
+}
