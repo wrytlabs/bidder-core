@@ -8,7 +8,7 @@ import './IFrankencoin.sol';
 interface IPositionV1 {
 	function original() external returns (address);
 
-	function collateral() external returns (IERC20);
+	function collateral() external view returns (IERC20);
 
 	function minimumCollateral() external returns (uint256);
 
