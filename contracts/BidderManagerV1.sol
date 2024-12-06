@@ -23,9 +23,10 @@ contract BidderManagerV1 is ERC721 {
 
 	uint256 public immutable fee = 100_000; // executor fee, everyone can execute, 10% of profits
 
-	uint256 public tokenCnt;
+	uint256 public tokenCount;
 	uint256 public totalFunds;
 	uint256 public totalRewards;
+	uint256 public totalClaims;
 	uint256 public refRatio = 1 ether;
 
 	struct Fund {
@@ -37,8 +38,8 @@ contract BidderManagerV1 is ERC721 {
 
 	// ---------------------------------------------------------------------------------------
 
-	event Create(address indexed owner, uint256 tokenId, uint256 amount, uint256 refRatio);
-	event Close(address indexed owner, uint256 tokenId, uint256 funds, uint256 payout);
+	event Create(address indexed owner, uint256 tokenId, uint256 amount, uint256 refRatio, uint256 totalFunds);
+	event Close(address indexed owner, uint256 tokenId, uint256 funds, uint256 claim, uint256 totalClaim);
 	event Execute(
 		address indexed executor,
 		uint256 challengeIndex,
@@ -87,17 +88,17 @@ contract BidderManagerV1 is ERC721 {
 
 	function createTo(address to, uint256 amount) public returns (uint256) {
 		if (to == address(0) || amount == 0) revert NoChange();
-		tokenCnt += 1;
+		tokenCount += 1;
 
-		zchf.transferFrom(to, address(this), amount);
+		zchf.transferFrom(msg.sender, address(this), amount);
 		totalFunds += amount;
-		funds[tokenCnt].amount = amount;
-		funds[tokenCnt].refRatio = refRatio;
+		funds[tokenCount].amount = amount;
+		funds[tokenCount].refRatio = refRatio;
 
-		_mint(to, tokenCnt);
+		_mint(to, tokenCount);
 
-		emit Create(to, tokenCnt, amount, refRatio);
-		return tokenCnt;
+		emit Create(to, tokenCount, amount, refRatio, totalFunds);
+		return tokenCount;
 	}
 
 	// ---------------------------------------------------------------------------------------
@@ -109,17 +110,18 @@ contract BidderManagerV1 is ERC721 {
 
 		Fund memory user = funds[tokenId];
 		uint256 diff = refRatio - user.refRatio;
-		uint256 payout = user.amount + (diff * user.amount) / 1 ether;
+		uint256 claim = (diff * user.amount) / 1 ether;
 
 		// clean up
 		totalFunds -= user.amount;
+		totalClaims += claim;
 		_burn(tokenId);
 		delete funds[tokenId];
 
 		// pay out
-		zchf.transfer(msg.sender, payout);
+		zchf.transfer(msg.sender, user.amount + claim);
 
-		emit Close(msg.sender, tokenId, user.amount, payout);
+		emit Close(msg.sender, tokenId, user.amount, claim, totalClaims);
 	}
 
 	// ---------------------------------------------------------------------------------------
