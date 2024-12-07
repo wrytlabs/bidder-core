@@ -52,7 +52,7 @@ contract BidderManagerV1 is ERC721 {
 
 	error NoChange();
 	error NoFunds();
-	error NoLoss(uint256 zchfBefore, uint256 zchfAfter);
+	error NoProfit(uint256 zchfBefore, uint256 zchfAfter);
 	error WrongInputToken(address input, address needed);
 	error WrongOutputToken(address output, address needed);
 
@@ -170,7 +170,7 @@ contract BidderManagerV1 is ERC721 {
 
 		// check zchf balance afterwards
 		uint256 zchfAfter = zchf.balanceOf(address(this));
-		if (zchfAfter < zchfBefore) revert NoLoss(zchfBefore, zchfAfter);
+		if (zchfAfter <= zchfBefore) revert NoProfit(zchfBefore, zchfAfter);
 
 		// declareProfit
 		declareProfit(zchfBefore, zchfAfter);
