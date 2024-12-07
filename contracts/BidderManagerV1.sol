@@ -6,7 +6,6 @@ import {ERC721} from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
 import {ISwapRouter} from '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
-import {IQuoter} from '@uniswap/v3-periphery/contracts/interfaces/IQuoter.sol';
 
 import {IFrankencoin} from './Frankencoin/IFrankencoin.sol';
 import {IMintingHubV1} from './Frankencoin/IMintingHubV1.sol';
@@ -16,7 +15,6 @@ contract BidderManagerV1 is ERC721 {
 	using Math for uint256;
 
 	ISwapRouter public immutable swapRouter;
-	IQuoter public immutable quoter;
 
 	IFrankencoin public immutable zchf;
 	IMintingHubV1 public immutable hub;
@@ -62,14 +60,12 @@ contract BidderManagerV1 is ERC721 {
 
 	constructor(
 		ISwapRouter _swapRouter,
-		IQuoter _quoter,
 		IFrankencoin _zchf,
 		IMintingHubV1 _hub,
 		string memory name,
 		string memory symbol
 	) ERC721(name, symbol) {
 		swapRouter = _swapRouter;
-		quoter = _quoter;
 		zchf = _zchf;
 		hub = _hub;
 	}
@@ -151,29 +147,6 @@ contract BidderManagerV1 is ERC721 {
 
 	// ---------------------------------------------------------------------------------------
 
-	function encodePath(address[] memory tokens, uint24[] memory fees) public pure returns (bytes memory) {
-		require(tokens.length >= 2 && tokens.length - 1 == fees.length);
-
-		bytes memory path = new bytes(0);
-		for (uint256 i = 0; i < fees.length; i++) {
-			path = abi.encodePacked(path, tokens[i], fees[i]);
-		}
-		path = abi.encodePacked(path, tokens[tokens.length - 1]);
-
-		return path;
-	}
-
-	function quoteUniswap(address[] memory tokens, uint24[] memory fees, uint256 amountIn) public returns (uint256) {
-		bytes memory path = encodePath(tokens, fees);
-		try quoter.quoteExactInput(path, amountIn) returns (uint256 amount) {
-			return amount;
-		} catch {
-			return 0;
-		}
-	}
-
-	// ---------------------------------------------------------------------------------------
-
 	function execute(uint256 index, address[] memory tokens, uint24[] memory fees) public {
 		(address coll, uint256 size, uint256 toBid) = quoteAuction(index);
 
@@ -206,6 +179,19 @@ contract BidderManagerV1 is ERC721 {
 		emit Execute(msg.sender, index, coll, size, toBid, swapped);
 	}
 
+	// ---------------------------------------------------------------------------------------
+
+	function encodePath(address[] memory tokens, uint24[] memory fees) public pure returns (bytes memory) {
+		require(tokens.length >= 2 && tokens.length - 1 == fees.length);
+
+		bytes memory path = new bytes(0);
+		for (uint256 i = 0; i < fees.length; i++) {
+			path = abi.encodePacked(path, tokens[i], fees[i]);
+		}
+
+		return abi.encodePacked(path, tokens[tokens.length - 1]);
+	}
+
 	function executeSwap(
 		address[] memory tokens,
 		uint24[] memory fees,
@@ -233,7 +219,7 @@ contract BidderManagerV1 is ERC721 {
 
 	// ---------------------------------------------------------------------------------------
 
-	function declareProfit(uint256 zchfBefore, uint256 zchfAfter) public {
+	function declareProfit(uint256 zchfBefore, uint256 zchfAfter) internal {
 		// profit, overflow checked before
 		uint256 profit = zchfAfter - zchfBefore;
 		refRatio += (profit * 1 ether) / totalFunds;
