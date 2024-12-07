@@ -1,5 +1,5 @@
 {
-	"name": "@wrytlabs/template-core",
+	"name": "@wrytlabs/bidder-core",
 	"version": "0.0.1",
 	"private": false,
 	"license": "MIT",
@@ -25,13 +25,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/wrytlabs/core"
+		"url": "git+https://github.com/wrytlabs/bidder-core"
 	},
 	"keywords": [],
 	"bugs": {
-		"url": "https://github.com/wrytlabs/core/issues"
+		"url": "https://github.com/wrytlabs/bidder-core/issues"
 	},
-	"homepage": "https://github.com/wrytlabs/core#readme",
+	"homepage": "https://github.com/wrytlabs/bidder-core#readme",
 	"devDependencies": {
 		"@nomicfoundation/hardhat-chai-matchers": "^2.0.2",
 		"@nomicfoundation/hardhat-ethers": "^3.0.8",
