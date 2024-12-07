@@ -53,6 +53,7 @@ contract BidderManagerV1 is ERC721 {
 	error NoChange();
 	error NoFunds();
 	error NoProfit(uint256 zchfBefore, uint256 zchfAfter);
+	error WrongEncodePathInputs();
 	error WrongInputToken(address input, address needed);
 	error WrongOutputToken(address output, address needed);
 
@@ -182,7 +183,7 @@ contract BidderManagerV1 is ERC721 {
 	// ---------------------------------------------------------------------------------------
 
 	function encodePath(address[] memory tokens, uint24[] memory fees) public pure returns (bytes memory) {
-		require(tokens.length >= 2 && tokens.length - 1 == fees.length);
+		if (tokens.length < 2 || tokens.length - 1 != fees.length) revert WrongEncodePathInputs();
 
 		bytes memory path = new bytes(0);
 		for (uint256 i = 0; i < fees.length; i++) {
